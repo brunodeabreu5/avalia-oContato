@@ -36,6 +36,4 @@ public class ContatoController {
         service.delete(id);
         return ResponseEntity.ok().build();
     }
-
-
 }
