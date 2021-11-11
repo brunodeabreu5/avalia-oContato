@@ -42,7 +42,7 @@ public class ContatoService {
         return ContatoDto.from(repositories.save(Contato.from(form)));
     }
 
-    public ContatoDto update(int id, ContatoForm form){
+    public ContatoDto update(Long id, ContatoForm form){
         Contato contato =repositories.findById(id).orElseThrow(()->{
             logger.error("Id not{}",id);
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
@@ -51,7 +51,7 @@ public class ContatoService {
         return ContatoDto.from(repositories.save(contato));
     }
 
-    public void delete(int id) {
+    public void delete(Long id) {
         Contato contato = repositories.findById(id).orElseThrow(() -> {
             logger.error("id não existe", id);
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);

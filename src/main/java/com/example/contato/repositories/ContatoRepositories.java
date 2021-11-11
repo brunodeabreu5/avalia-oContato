@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface ContatoRepositories extends JpaRepository<Contato, Integer> {
+public interface ContatoRepositories extends JpaRepository<Contato, Long> {
 
     Optional<Contato> findByEmail(String email);
     Optional<Contato> findByTelefone(String telefone);

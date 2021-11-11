@@ -8,7 +8,7 @@ import org.modelmapper.convention.MatchingStrategies;
 @Data
 public class ContatoDto {
 
-    private int id;
+    private Long id;
     private String nome;
     private String email;
     private String telefone;

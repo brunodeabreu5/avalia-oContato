@@ -28,11 +28,11 @@ public class ContatoController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ContatoDto> update(@PathVariable Integer id, @RequestBody @Valid ContatoForm form){
+    public ResponseEntity<ContatoDto> update(@PathVariable Long id, @RequestBody @Valid ContatoForm form){
         return ResponseEntity.ok(service.update(id, form));
     }
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> delete(@PathVariable int id){
+    public ResponseEntity<?> delete(@PathVariable Long id){
         service.delete(id);
         return ResponseEntity.ok().build();
     }
