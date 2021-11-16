@@ -5,11 +5,11 @@ import com.example.contato.form.ContatoForm;
 import com.example.contato.models.Contato;
 import com.example.contato.repositories.ContatoRepositories;
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.slf4j.Logger;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -20,7 +20,6 @@ public class ContatoService {
     @Autowired
     private ContatoRepositories repositories;
 
-
     Logger logger = LoggerFactory.getLogger(ContatoService.class);
 
     public List<ContatoDto> findAll(){
@@ -28,26 +27,18 @@ public class ContatoService {
         return contatos.stream().map(ContatoDto::from).collect(Collectors.toList());
     }
 
-    public ContatoDto create(ContatoForm form) {
-        if (repositories.findByEmail(form.getEmail()).isPresent()) {
-        logger.error("Email existe{}",form.getEmail());
-        throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"email cadastrado");
-
-        }
-        if (repositories.findByTelefone(form.getTelefone()).isPresent()){
-            logger.error("telefone existe{}",form.getTelefone());
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"telefone cadastrado");
-
-        }
-        return ContatoDto.from(repositories.save(Contato.from(form)));
+    public ContatoDto create(ContatoForm obj) {
+        Contato from = Contato.from(obj);
+        return ContatoDto.from(repositories.save(from));
     }
 
     public ContatoDto update(Long id, ContatoForm form){
+        ModelMapper modelMapper = new ModelMapper();
         Contato contato =repositories.findById(id).orElseThrow(()->{
             logger.error("Id not{}",id);
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         });
-
+        modelMapper.map(form,contato);
         return ContatoDto.from(repositories.save(contato));
     }
 
@@ -58,5 +49,12 @@ public class ContatoService {
         });
 
         repositories.delete(contato);
+    }
+
+    public ContatoDto findById(Long id) {
+        return ContatoDto.from(repositories.findById(id).orElseThrow(()->{
+            logger.error("id não existe", id);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }));
     }
 }

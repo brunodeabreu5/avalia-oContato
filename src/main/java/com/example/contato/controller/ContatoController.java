@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.Column;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -22,7 +23,8 @@ public class ContatoController {
         return ResponseEntity.ok(service.findAll());
     }
 
-    @PostMapping("/{id}")
+    @PostMapping
+    @Column(unique = true)
     public ResponseEntity<ContatoDto> create(@RequestBody @Valid ContatoForm form){
         return ResponseEntity.ok(service.create(form));
     }
@@ -36,4 +38,9 @@ public class ContatoController {
         service.delete(id);
         return ResponseEntity.ok().build();
     }
+    @GetMapping("/{id}")
+    public ResponseEntity<ContatoDto> findById(@PathVariable Long id){
+        return ResponseEntity.ok(service.findById(id));
+    }
+
 }
