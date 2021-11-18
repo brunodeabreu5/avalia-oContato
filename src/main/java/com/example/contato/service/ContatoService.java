@@ -28,8 +28,13 @@ public class ContatoService {
     }
 
     public ContatoDto create(ContatoForm obj) {
-        Contato from = Contato.from(obj);
-        return ContatoDto.from(repositories.save(from));
+        if(repositories.findByEmail(obj.getEmail()).isPresent()){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Email cadastrado");
+
+        }if(repositories.findByTelefone(obj.getTelefone()).isPresent()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Telefone cadastrado");
+        }
+        return ContatoDto.from(repositories.save(Contato.from(obj)));
     }
 
     public ContatoDto update(Long id, ContatoForm form){
